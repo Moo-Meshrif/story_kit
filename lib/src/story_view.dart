@@ -151,17 +151,43 @@ class StoryKitViewState extends State<StoryKitView> {
   late final PageController pageController;
   Map<int, List<bool>> _storiesIndexPerPage = {};
   late int initialStoryIndex;
-  bool firePreviousPage= false;
+  bool firePreviousPage = false;
 
   @override
   void initState() {
     super.initState();
     initialStoryIndex = widget.initialStoryIndex;
-    for (int i = 0; i < widget.pageCount; i++) {
-      _storiesIndexPerPage[i] =
-          List.generate(widget.storyCount(i), (index) => false);
-    }
     pageController = PageController(initialPage: widget.initialPage);
+    _initializeStoriesMap();
+  }
+
+  @override
+  void didUpdateWidget(covariant StoryKitView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If pageCount or storyCount changed, reinitialize the map
+    if (widget.pageCount != oldWidget.pageCount ||
+        widget.storyCount != oldWidget.storyCount) {
+      _initializeStoriesMap();
+    }
+
+    // If initialPage changed, replace the PageController
+    if (widget.initialPage != oldWidget.initialPage) {
+      pageController.dispose();
+      pageController = PageController(initialPage: widget.initialPage);
+    }
+
+    // If initialStoryIndex changed, just update the field
+    if (widget.initialStoryIndex != oldWidget.initialStoryIndex) {
+      initialStoryIndex = widget.initialStoryIndex;
+    }
+  }
+
+  void _initializeStoriesMap() {
+    final map = <int, List<bool>>{};
+    for (int page = 0; page < widget.pageCount; page++) {
+      map[page] = List<bool>.filled(widget.storyCount(page), false);
+    }
+    _storiesIndexPerPage = map;
   }
 
   @override
@@ -375,7 +401,7 @@ class _StoryPageBuilderState extends State<_StoryPageBuilder>
     // Update stories indexes
     if (widget.viewStatusList != oldWidget.viewStatusList) {
       _viewStatusList = widget.viewStatusList;
-    } 
+    }
 
     // When the initial story index changes, start from that index cleanly
     if (widget.initialStoryIndex != oldWidget.initialStoryIndex) {
