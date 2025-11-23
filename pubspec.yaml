@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.4
   cached_network_image: ^3.4.1
-  video_player: ^2.8.1
+  better_player_plus: ^1.0.8
+  package_info_plus: ^8.0.0
 
 dev_dependencies:
   flutter_test:
