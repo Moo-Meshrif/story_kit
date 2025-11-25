@@ -499,11 +499,17 @@ class _StoryPageBuilderState extends State<_StoryPageBuilder>
                     const edgeFactor = 0.20; // 20% on each side
                     final leftEdge = width * edgeFactor;
                     final rightEdge = width * (1 - edgeFactor);
-
+                    
+                    bool arabic =
+                        Localizations.localeOf(context).languageCode == 'ar';
                     if (dx <= leftEdge) {
-                      stackController.decrement(widget.previousPage);
+                      arabic
+                          ? stackController.increment(widget.nextPage)
+                          : stackController.decrement(widget.previousPage);
                     } else if (dx >= rightEdge) {
-                      stackController.increment(widget.nextPage);
+                      arabic
+                          ? stackController.decrement(widget.previousPage)
+                          : stackController.increment(widget.nextPage);
                     }
                   }
                 },

@@ -59,7 +59,6 @@ class _StoryKitVideoState extends State<StoryKitVideo>
         controlsConfiguration: BetterPlayerControlsConfiguration(
           showControls: false,
         ),
-        handleLifecycle: false,
         placeholder: _buildDefaultLoading(),
       ),
       betterPlayerDataSource: dataSource,
@@ -108,11 +107,9 @@ class _StoryKitVideoState extends State<StoryKitVideo>
       case AppLifecycleState.inactive:
       case AppLifecycleState.hidden:
       case AppLifecycleState.paused:
-        _betterPlayerController?.pause();
         pause();
         break;
       case AppLifecycleState.resumed:
-        _betterPlayerController?.play();
         play();
         break;
     }
